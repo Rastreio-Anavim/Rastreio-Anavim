@@ -228,6 +228,63 @@ table.simple{width:100%;border-collapse:collapse}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--wine);color:var(--cream);padding:11px 20px;border-radius:999px;z-index:100;font-size:12.5px;box-shadow:0 10px 26px rgba(0,0,0,.28);max-width:90vw;border:1px solid rgba(241,236,197,.25)}
 .toast.err{background:var(--err);border-color:var(--err);border-radius:18px}
 .loading{position:fixed;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 70%,transparent);z-index:70;font:500 13px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:2px;color:var(--text-2)}
+.mfilter{display:none}
+#cards{display:none}
+@media (max-width:760px){
+  body{font-size:13px}
+  header{flex-wrap:wrap;gap:8px 12px;padding:10px 14px 0;border-radius:0 0 20px 20px;min-height:0}
+  .brand{gap:10px;flex:1;min-width:0}
+  .brand img{height:28px}
+  .brand .sep,.brand small,.user{display:none}
+  .brand h1{font-size:12.5px;letter-spacing:1.1px;white-space:nowrap}
+  header .grow{display:none}
+  .btn.dark{padding:5px 10px}
+  .tabs{order:3;flex-basis:100%;margin:0;overflow-x:auto;gap:0}
+  .tab{padding:9px 12px 10px;margin-bottom:0;font-size:11px;letter-spacing:1px;white-space:nowrap}
+  .toolbar{padding:12px 12px 6px;gap:6px}
+  .search{flex:1 1 100%}
+  .search input{width:100%!important}
+  .toolbar .btn{padding:6px 11px;font-size:10.5px;letter-spacing:.5px}
+  #btnWrap,#btnCols .lbl-d{display:none}
+  .mfilter{display:block;flex:1 1 100%;padding:8px 14px;border:1.5px solid var(--line-3);border-radius:999px;font-size:12.5px}
+  .count{flex-basis:100%;margin:2px 0 0 4px}
+  .chips,.period{flex-wrap:nowrap;overflow-x:auto;padding:6px 12px;gap:6px 16px;scrollbar-width:none}
+  .chips::-webkit-scrollbar,.period::-webkit-scrollbar{display:none}
+  .chipgrp{flex-wrap:nowrap}
+  .chipgrp>em{white-space:nowrap}
+  #btnClear:disabled{display:none}
+  .chip,.pbtn{white-space:nowrap}
+  .ptip{display:none}
+  .bulk{flex-wrap:wrap;margin:6px 12px 0}
+  .bulk select{flex:1 1 100%}
+  .wrap{left:10px;right:10px;bottom:10px;background:transparent;border:0;border-radius:0}
+  #cards{display:grid;gap:10px;padding-bottom:10px}
+  .pcard{background:var(--panel);border:1px solid var(--line-3);border-radius:16px;padding:10px 14px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+  .pcard.sel{background:var(--sel)}
+  .pc-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid var(--line-2);font-weight:600;color:var(--text-2);font-size:13px}
+  .pc-head input{accent-color:var(--wine);width:17px;height:17px;flex:none}
+  .pc-head span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pc-head em{font-style:normal;font-weight:500;font-size:11px;color:var(--muted);white-space:nowrap}
+  .pf{min-width:0}
+  .pf .pl{display:block;font:600 9.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:1px}
+  .pf .c{padding:0;min-height:0;white-space:normal;word-break:break-word;text-align:left!important;font-size:13px}
+  .pf.long,.pf.st{grid-column:1/-1}
+  .pf.long .c{white-space:pre-wrap}
+  .pf.st .c{display:flex;align-items:center;gap:6px}
+  .pf.st .stsel{padding:8px 26px 8px 12px;font-size:12.5px}
+  .pf.typed .c{border:1px dashed var(--line-3);border-radius:8px;padding:6px 9px;margin:0}
+  .pf.typed.empty .c:before{content:'toque para informar'}
+  .pf.man .c{position:relative;font-style:italic}
+  .pf.man .c:after{content:'';position:absolute;top:2px;right:-8px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .pf.saving{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+  .pz{padding:6px 10px 30px}
+  .pzbox{overflow-x:auto}
+  .simple th,.simple td{padding:8px 10px}
+  .modal{border-radius:18px}
+  .modal .ft .btn{flex:1;justify-content:center}
+  .fmenu{width:min(300px,calc(100vw - 20px))}
+  .toast{max-width:calc(100vw - 24px);bottom:14px;text-align:center}
+}
 @media (max-width:900px){.search input{width:200px}.brand small,.brand .sep{display:none}header{flex-wrap:wrap;border-radius:0 0 20px 20px}.tabs{margin-left:0}.wrap{left:10px;right:10px}.toolbar,.chips{padding-left:12px;padding-right:12px}}
 </style>
 </head>
@@ -293,6 +350,7 @@ table.simple{width:100%;border-collapse:collapse}
       <button class="btn" id="btnWrap" title="Mostrar textos longos em várias linhas">Quebrar texto</button>
       <button class="btn" id="btnExport">Exportar Excel</button>
       <button class="btn icon" id="btnReload" title="Recarregar do banco">↻</button>
+      <select id="mFilter" class="mfilter"></select>
       <span class="count" id="count"></span>
     </div>
     <div class="chips period" id="period"></div>
@@ -307,7 +365,8 @@ table.simple{width:100%;border-collapse:collapse}
       <button class="btn danger" id="bulkDel">Excluir pedidos</button>
     </div>
     <div class="wrap" id="wrap">
-      <table class="grid"><colgroup id="cg"></colgroup><thead id="th"></thead><tbody id="tb"></tbody></table>
+      <table class="grid" id="grid"><colgroup id="cg"></colgroup><thead id="th"></thead><tbody id="tb"></tbody></table>
+      <div id="cards"></div>
       <div id="moreBox"></div>
     </div>
   </section>
@@ -404,7 +463,7 @@ const COLS = [
   {k:'mensagem_original',      l:'Mensagem Original (planilha)', t:'long', w:302, hide:true},
 ];
 const COL = Object.fromEntries(COLS.map(c=>[c.k,c]));
-const LS_CFG='rastreio_anavim_cfg', LS_LAYOUT='rastreio_anavim_layout_v4', LS_WRAP='rastreio_anavim_wrap', LS_THEME='rastreio_anavim_tema', LS_TAB='rastreio_anavim_aba';
+const LS_CFG='rastreio_anavim_cfg', LS_LAYOUT='rastreio_anavim_layout_v4', LS_WRAP='rastreio_anavim_wrap', LS_THEME='rastreio_anavim_tema', LS_TAB='rastreio_anavim_aba', LS_SORT='rastreio_anavim_ordem';
 const PAGE = 300;
 
 /* ---------------- utilidades ---------------- */
@@ -435,7 +494,7 @@ const moneyFmt= new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'})
 /* ---------------- tema claro / escuro ---------------- */
 const ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
 const ICON_SUN  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
-function setTheme(t){ document.documentElement.setAttribute('data-theme', t); ls.set(LS_THEME, t);
+function setTheme(t, silent){ document.documentElement.setAttribute('data-theme', t); ls.set(LS_THEME, t); if(!silent && prefsUid) savePrefs();
   $('#btnTheme').innerHTML = t==='dark' ? ICON_SUN : ICON_MOON; $('#btnTheme').title = t==='dark' ? 'Modo claro' : 'Modo escuro'; }
 $('#btnTheme').onclick = ()=> setTheme(document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
 setTheme(document.documentElement.getAttribute('data-theme') || 'light');
@@ -471,7 +530,7 @@ function holidays(y){
   [-48,-47,-2,60].forEach(o=>s.add(d(o)));   // Carnaval (seg/ter), Sexta-feira Santa, Corpus Christi
   return holCache[y] = s;
 }
-function isBusinessDay(ms){ const d=new Date(ms), w=d.getUTCDay(); if(w===0||w===6) return false; const iso=d.toISOString().slice(0,10); return !holidays(d.getUTCFullYear()).has(iso); }
+function isBusinessDay(ms){ const w=new Date(ms).getUTCDay(); return w!==0 && w!==6; }   // não conta sábado e domingo
 function addDays(iso, n, tipo){
   const [y,m,d] = iso.split('-').map(Number); let ms = Date.UTC(y,m-1,d);
   if(tipo === 'corridos') ms += n*86400000;
@@ -588,21 +647,50 @@ const sitInfo = v => SITUACAO.find(s=>s.v===v);
 
 /* ---------------- estado ---------------- */
 let supa = null, rows = [], byId = new Map(), prazos = [], prazoMap = new Map();
-let filters = {}, sort = {k:null, dir:1}, search = '', selected = new Set(), limit = PAGE;
+let filters = {}, sort = (ls.get(LS_SORT) && ls.get(LS_SORT).k!==undefined) ? ls.get(LS_SORT) : {k:null, dir:1}, search = '', selected = new Set(), limit = PAGE;
 let layout = loadLayout(), importing = false, editorOpen = null, pendingRender = false, tab = 'pedidos';
 
-function loadLayout(){
+function mergeLayout(s){
   const def = {order: COLS.map(c=>c.k), hidden: COLS.filter(c=>c.hide).map(c=>c.k), widths:{}};
-  const s = ls.get(LS_LAYOUT);
   if(!s || !Array.isArray(s.order)) return def;
-  const order = s.order.filter(k=>COL[k]);
-  COLS.forEach((c,i)=>{ if(!order.includes(c.k)){
-    const prev = COLS[i-1] && order.indexOf(COLS[i-1].k); order.splice(prev>=0?prev+1:order.length, 0, c.k);
-    if(c.hide) (s.hidden = s.hidden||[]).push(c.k);
+  const order = s.order.filter(k=>COL[k]), hidden = (s.hidden||[]).filter(k=>COL[k]);
+  COLS.forEach((c,i)=>{ if(!order.includes(c.k)){          // coluna nova no sistema: entra perto da vizinha
+    const prev = COLS[i-1] ? order.indexOf(COLS[i-1].k) : -1; order.splice(prev>=0?prev+1:order.length, 0, c.k);
+    if(c.hide) hidden.push(c.k);
   }});
-  return {order, hidden:(s.hidden||[]).filter(k=>COL[k]), widths:s.widths||{}};
+  return {order, hidden, widths:s.widths||{}};
 }
-const saveLayout = () => ls.set(LS_LAYOUT, layout);
+function loadLayout(){ return mergeLayout(ls.get(LS_LAYOUT) || ls.get('rastreio_anavim_layout_v4')); }
+
+/* ---------- configurações do usuário (salvas no Supabase por usuário + cópia no navegador) ---------- */
+var prefsUid = null, prefsT = null;   // var: usado antes (tema) sem erro
+function collectPrefs(){ return {layout, sort, wrap: document.body.classList.contains('wrap-text'), theme: document.documentElement.getAttribute('data-theme'), tab}; }
+function savePrefs(){
+  ls.set(LS_LAYOUT, layout); ls.set(LS_SORT, sort);
+  if(!supa || !prefsUid) return;
+  clearTimeout(prefsT);
+  prefsT = setTimeout(async ()=>{
+    const {error} = await supa.from('preferencias_usuario').upsert({user_id: prefsUid, prefs: collectPrefs()}, {onConflict:'user_id'});
+    if(error) console.warn('Configurações não salvas no banco:', error.message);
+  }, 600);
+}
+function applyPrefs(p){
+  if(p.layout) layout = mergeLayout(p.layout);
+  if(p.sort && 'k' in p.sort) sort = {k: COL[p.sort.k] ? p.sort.k : null, dir: p.sort.dir===-1 ? -1 : 1};
+  if(typeof p.wrap === 'boolean'){ document.body.classList.toggle('wrap-text', p.wrap); $('#btnWrap').classList.toggle('primary', p.wrap); ls.set(LS_WRAP, p.wrap); }
+  if(p.theme === 'dark' || p.theme === 'light') setTheme(p.theme, true);
+  if(p.tab === 'pedidos' || p.tab === 'prazos') ls.set(LS_TAB, p.tab);
+  ls.set(LS_LAYOUT, layout); ls.set(LS_SORT, sort);
+}
+async function loadPrefs(uid){
+  prefsUid = uid;
+  try{
+    const {data, error} = await supa.from('preferencias_usuario').select('prefs').eq('user_id', uid).maybeSingle();
+    if(error) throw error;
+    if(data && data.prefs) applyPrefs(data.prefs); else savePrefs();
+  }catch(e){ console.warn('Sem configurações no banco (rode o script v5):', e.message||e); }
+}
+const saveLayout = () => savePrefs();
 const visibleCols = () => layout.order.filter(k=>!layout.hidden.includes(k)).map(k=>COL[k]);
 
 /* ---------------- cálculo do prazo ---------------- */
@@ -621,8 +709,8 @@ function derive(r, today){
   const p = findPrazo(r);
   r._prazo_ref = p ? p.id : null;
   r._prazo_dias = r.prazo_dias_manual ?? (p ? p.prazo_dias : null);
-  const tipo = p ? p.tipo_dias : 'uteis';
-  const base = r.data_coleta ? String(r.data_coleta).slice(0,10) : r.data_emissao_nf ? String(r.data_emissao_nf).slice(0,10) : null;
+  const tipo = 'uteis';
+  const base = r.data_coleta ? String(r.data_coleta).slice(0,10) : null;      // conta a partir da Data Coleta
   const prev = r.previsao_entrega_manual || (base && r._prazo_dias !== null ? addDays(base, r._prazo_dias, tipo) : null);
   r._previsao = prev;
   let sit;
@@ -650,11 +738,14 @@ function filtered(exceptKey){
   return rows.filter(r => (exceptKey==='_ano' || period.y===null || r._ano===period.y) && (exceptKey==='_mes' || period.m===null || r._mes===period.m)
     && fk.every(k => filters[k].has(fkey(COL[k], r[k]))) && matchesSearch(r, cols));
 }
+const baseDate = r => String(r.data_emissao_nf || r.data_pedido || '9999');
 function viewRows(){
   const out = filtered(null);
-  if(sort.k){ const c = COL[sort.k]; out.sort((a,b)=>cmp(c, a[c.k], b[c.k]) * sort.dir); }
+  if(sort.k && COL[sort.k]){ const c = COL[sort.k]; out.sort((a,b)=>cmp(c, a[c.k], b[c.k]) * sort.dir || baseDate(a).localeCompare(baseDate(b)) || a.pedido-b.pedido); }
+  else out.sort((a,b)=> baseDate(a).localeCompare(baseDate(b)) || a.pedido-b.pedido);   // padrão: mais antigo → mais novo
   return out;
 }
+
 
 /* ---------------- renderização ---------------- */
 const ICON_F = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18l-7 9v6l-4 2v-8z"/></svg>';
@@ -678,7 +769,11 @@ function render(){
       <button class="fbtn ${filters[c.k]?'on':''}" data-f="${c.k}" title="Filtrar">${ICON_F}</button></div>
       <span class="rz" data-rz="${c.k}"></span></th>`).join('') + '</tr>';
 
-  $('#tb').innerHTML = shown.map(r => {
+  const mobile = isMobile();
+  $('#grid').classList.toggle('hidden', mobile);
+  $('#cards').innerHTML = mobile ? shown.map(r=>cardHtml(r, cols)).join('') : '';
+  $('#mFilter').innerHTML = '<option value="">Filtrar / ordenar coluna…</option>' + cols.map(c=>`<option value="${c.k}">${esc(c.l)}${filters[c.k]?' ●':''}</option>`).join('');
+  if(mobile){ $('#tb').innerHTML=''; } else $('#tb').innerHTML = shown.map(r => {
     const id = r.pedido;
     return `<tr data-id="${id}" class="${selected.has(id)?'sel':''}"><td class="selc"><input type="checkbox" data-sel="${id}" ${selected.has(id)?'checked':''}></td>` +
       cols.map(c => cellHtml(c, r)).join('') + '</tr>';
@@ -691,27 +786,34 @@ function render(){
   $('#btnClear').disabled = !Object.keys(filters).length && !search && !sort.k && period.y===null && period.m===null;
   renderPeriod(); renderChips(); renderBulk(); sizeWrap();
 }
-function cellHtml(c, r){
+function cellHtml(c, r, card){
   const v = r[c.k];
+  const T = card ? 'div' : 'td', pf = card ? 'pf ' : '', lbl = card ? `<span class="pl">${esc(c.l)}</span>` : '';
   if(c.t === 'status'){
     const si = statusInfo(v);
     const style = si ? `--c:${si.cor};--b:${si.bg}` : '--c:#98A2B3;--b:transparent;border-color:var(--line)';
     const opts = ['<option value="">— definir —</option>']
       .concat(STATUS_ENTREGA.map(s=>`<option ${s.v===v?'selected':''}>${esc(s.v)}</option>`))
       .concat(v && !si ? [`<option selected>${esc(v)}</option>`] : []).join('');
-    return `<td class="st" data-k="${c.k}"><div class="c"><select class="stsel" data-st="${r.pedido}" style="${style}">${opts}</select>
-      <button class="hist" data-h="${r.pedido}" title="Histórico de status">${ICON_H}</button></div></td>`;
+    return `<${T} class="${pf}st" data-k="${c.k}">${lbl}<div class="c"><select class="stsel" data-st="${r.pedido}" style="${style}">${opts}</select>
+      <button class="hist" data-h="${r.pedido}" title="Histórico de status">${ICON_H}</button></div></${T}>`;
   }
   if(c.t === 'sit'){
     const si = sitInfo(v) || {cor:'#667085', bg:'#EEF0F3'};
-    return `<td class="ro sit" data-k="${c.k}"><div class="c">${v?`<span class="pill" style="--c:${si.cor};--b:${si.bg}">${esc(v)}</span>`:''}</div></td>`;
+    return `<${T} class="${pf}ro sit" data-k="${c.k}">${lbl}<div class="c">${v?`<span class="pill" style="--c:${si.cor};--b:${si.bg}">${esc(v)}</span>`:''}</div></${T}>`;
   }
   const txt = fmt(c, v);
   const manual = c.edit && r[c.edit] !== null && r[c.edit] !== undefined;
-  const cls = [c.t==='num'||c.t==='money'||c.t==='int'?'num':'', c.t==='id'?'id':'', c.t==='long'?'long':'', c.ro?'ro':'', txt===''?'empty':'', manual?'man':'', c.typed?'typed':''].join(' ');
-  const shownTxt = c.t==='long' && !document.body.classList.contains('wrap-text') ? txt.replace(/\s*\n\s*/g,' · ') : txt;
-  const title = c.typed ? ' title="Clique para digitar a data da entrega — o status é atualizado sozinho"' : manual ? ' title="Alterado manualmente — apague o valor para voltar ao cálculo automático"' : c.t==='long'&&txt ? ` title="${esc(txt)}"` : '';
-  return `<td class="${cls}" data-k="${c.k}"${title}><div class="c">${esc(shownTxt)}</div></td>`;
+  const cls = pf + [c.t==='num'||c.t==='money'||c.t==='int'?'num':'', c.t==='id'?'id':'', c.t==='long'?'long':'', c.ro?'ro':'', txt===''?'empty':'', manual?'man':'', c.typed?'typed':''].join(' ');
+  const shownTxt = c.t==='long' && !card && !document.body.classList.contains('wrap-text') ? txt.replace(/\s*\n\s*/g,' · ') : txt;
+  const title = c.typed ? ' title="Toque para digitar a data da entrega — o status é atualizado sozinho"' : manual ? ' title="Alterado manualmente — apague o valor para voltar ao cálculo automático"' : c.t==='long'&&txt ? ` title="${esc(txt)}"` : '';
+  return `<${T} class="${cls}" data-k="${c.k}"${title}>${lbl}<div class="c">${esc(shownTxt)}</div></${T}>`;
+}
+function cardHtml(r, cols){
+  const id = r.pedido;
+  return `<div class="pcard ${selected.has(id)?'sel':''}" data-id="${id}">
+    <label class="pc-head"><input type="checkbox" data-sel="${id}" ${selected.has(id)?'checked':''}><span>${esc(r.cliente||'Pedido '+id)}</span><em>${r.nota?'NF '+esc(r.nota):'Pedido '+id}</em></label>` +
+    cols.filter(c=>c.k!=='cliente').map(c=>cellHtml(c, r, true)).join('') + '</div>';
 }
 function chipGroup(label, key, items){
   const base = filtered(key);
@@ -736,7 +838,7 @@ function renderPeriod(){
     <div class="chipgrp"><em>Mês</em>
       <button class="pbtn ${period.m===null?'on':''}" data-pm="">Todos</button>
       ${MESES.map((n,i)=>`<button class="pbtn ${period.m===i+1?'on':''}" data-pm="${i+1}" ${mc.get(i+1)||period.m===i+1?'':'disabled'} title="${mc.get(i+1)||0} pedidos">${n}</button>`).join('')}</div>
-    <span class="ptip">pela Data (emissão da NF; sem NF, data do pedido)</span>`;
+    <span class="ptip">pela Data (emissão da NF)</span>`;
 }
 function renderBulk(){
   for(const id of [...selected]) if(!byId.has(id)) selected.delete(id);
@@ -757,9 +859,15 @@ function sizeWrap(){
 }
 window.addEventListener('resize', sizeWrap);
 
+/* ---------------- celular ---------------- */
+const mq = window.matchMedia('(max-width: 760px)');
+const isMobile = () => mq.matches;
+(mq.addEventListener ? mq.addEventListener('change', ()=>render()) : mq.addListener(()=>render()));
+$('#mFilter').addEventListener('change', e=>{ const k=e.target.value; if(k){ openFilter(k, e.target); e.target.value=''; } });
+
 /* ---------------- abas ---------------- */
 function setTab(t){
-  tab = t; ls.set(LS_TAB, t);
+  tab = t; ls.set(LS_TAB, t); if(prefsUid) savePrefs();
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on', b.dataset.tab===t));
   $('#viewPedidos').classList.toggle('hidden', t!=='pedidos');
   $('#viewPrazos').classList.toggle('hidden', t!=='prazos');
@@ -824,7 +932,7 @@ function openFilter(k, anchor){
       const allowed = new Set((q ? visible : items).map(([key])=>key).filter(key=>checked.has(key)));
       if(!q && allowed.size === items.length) delete filters[k]; else filters[k] = allowed;
     }
-    closeFilter(); limit = PAGE; render();
+    closeFilter(); limit = PAGE; if(a==='asc'||a==='desc') savePrefs(); render();
   });
   fq.focus();
 }
@@ -844,8 +952,8 @@ function openEditor(td){
   ed.innerHTML = long
     ? `<textarea>${esc(toInput(c,row[k]))}</textarea><div class="hint">Ctrl+Enter salva · Esc cancela</div>`
     : `<input type="${type}" ${type==='number'?'min="0" step="1"':type!=='text'?'step="1"':''} value="${esc(toInput(c,row[k]))}">${hint}`;
-  const w = Math.max(rect.width, long ? 360 : c.edit ? 240 : type==='datetime-local' ? 220 : 150);
-  ed.style.left = Math.min(rect.left, window.innerWidth - w - 10) + 'px';
+  const w = Math.min(window.innerWidth - 20, Math.max(rect.width, long ? 360 : c.edit ? 240 : type==='datetime-local' ? 220 : 150));
+  ed.style.left = Math.max(10, Math.min(rect.left, window.innerWidth - w - 10)) + 'px';
   ed.style.top = (long ? Math.min(rect.top, window.innerHeight - 190) : rect.top) + 'px';
   ed.style.width = w + 'px';
   document.body.appendChild(ed);
@@ -860,7 +968,7 @@ function openEditor(td){
   inp.addEventListener('blur', ()=> setTimeout(()=>{ if(editorOpen && editorOpen.inp===inp) closeEditor(true); }, 120));
 }
 function openEditorLater(td){ const id=td.parentElement.dataset.id, k=td.dataset.k;
-  setTimeout(()=>{ const el=document.querySelector(`tr[data-id="${id}"] td[data-k="${k}"]`); if(el) openEditor(el); }, 30); }
+  setTimeout(()=>{ const el=document.querySelector(`[data-id="${id}"] > [data-k="${k}"]`); if(el) openEditor(el); }, 30); }
 function closeEditor(save){
   if(!editorOpen) return;
   const {ed, inp, id, k} = editorOpen;
@@ -929,13 +1037,14 @@ async function saveCell(id, patch){
   markCell(row.pedido, marks, 'saved');
 }
 function markCell(id, keys, cls){
-  keys.forEach(k=>{ const td=document.querySelector(`tr[data-id="${id}"] td[data-k="${k}"]`); if(td){ td.classList.add(cls); if(cls==='saved') setTimeout(()=>td.classList.remove('saved'),1000);} });
+  keys.forEach(k=>{ const td=document.querySelector(`[data-id="${id}"] > [data-k="${k}"]`); if(td){ td.classList.add(cls); if(cls==='saved') setTimeout(()=>td.classList.remove('saved'),1000);} });
 }
 
 /* ---------------- eventos da tabela ---------------- */
-const tb = $('#tb');
-tb.addEventListener('dblclick', e=>{ const td=e.target.closest('td[data-k]'); if(td) openEditor(td); });
-tb.addEventListener('click', e=>{ const td=e.target.closest('td[data-k]'); if(td && COL[td.dataset.k]?.typed && !editorOpen) openEditor(td); });
+const tb = $('#wrap');
+const CELL = 'td[data-k], .pf[data-k]';
+tb.addEventListener('dblclick', e=>{ const td=e.target.closest(CELL); if(td) openEditor(td); });
+tb.addEventListener('click', e=>{ const td=e.target.closest(CELL); if(td && (COL[td.dataset.k]?.typed || (isMobile() && !e.target.closest('select,button,input'))) && !editorOpen) openEditor(td); });
 tb.addEventListener('change', e=>{
   const t = e.target;
   if(t.dataset.st){
@@ -943,7 +1052,7 @@ tb.addEventListener('change', e=>{
     if(isEntregue(t.value) && !row.data_entrega){ render(); askDeliveryDate(`Pedido ${id} · data da entrega`, d=>saveCell(id, {data_entrega:d})); }
     else saveCell(id, {status_entrega: t.value || null});
   }
-  else if(t.dataset.sel){ const id=Number(t.dataset.sel); t.checked?selected.add(id):selected.delete(id); t.closest('tr').classList.toggle('sel',t.checked); renderBulk(); updSelAll(); }
+  else if(t.dataset.sel){ const id=Number(t.dataset.sel); t.checked?selected.add(id):selected.delete(id); t.closest('[data-id]').classList.toggle('sel',t.checked); renderBulk(); updSelAll(); }
 });
 tb.addEventListener('click', e=>{ const h=e.target.closest('[data-h]'); if(h) showHistory(Number(h.dataset.h)); });
 function updSelAll(){ const a=$('#selAll'); if(a) a.checked = lastView.length>0 && lastView.every(r=>selected.has(r.pedido)); }
@@ -979,11 +1088,11 @@ let qT; $('#q').addEventListener('input', e=>{ clearTimeout(qT); qT=setTimeout((
 $('#period').addEventListener('click', e=>{ const b=e.target.closest('.pbtn'); if(!b||b.disabled) return;
   if('py' in b.dataset) period.y = b.dataset.py ? +b.dataset.py : null; else period.m = b.dataset.pm ? +b.dataset.pm : null;
   limit=PAGE; render(); });
-$('#btnClear').onclick = ()=>{ filters={}; search=''; sort={k:null,dir:1}; period={y:null,m:null}; $('#q').value=''; limit=PAGE; render(); };
+$('#btnClear').onclick = ()=>{ filters={}; search=''; sort={k:null,dir:1}; period={y:null,m:null}; savePrefs(); $('#q').value=''; limit=PAGE; render(); };
 $('#moreBox').addEventListener('click', e=>{ if(e.target.id==='btnMore'){ limit+=PAGE; render(); } });
 $('#chips').addEventListener('click', e=>{ const c=e.target.closest('[data-chip]'); if(!c) return; const v=c.dataset.chip, key=c.dataset.ck, f=filters[key];
   if(f && f.size===1 && f.has(v)) delete filters[key]; else filters[key] = new Set([v]); limit=PAGE; render(); });
-$('#btnWrap').onclick = ()=>{ document.body.classList.toggle('wrap-text'); ls.set(LS_WRAP, document.body.classList.contains('wrap-text')); $('#btnWrap').classList.toggle('primary'); render(); };
+$('#btnWrap').onclick = ()=>{ document.body.classList.toggle('wrap-text'); ls.set(LS_WRAP, document.body.classList.contains('wrap-text')); $('#btnWrap').classList.toggle('primary'); savePrefs(); render(); };
 $('#btnReload').onclick = ()=> loadAll();
 $('#btnLogout').onclick = async ()=>{ await supa.auth.signOut(); location.reload(); };
 $('#bulkSt').innerHTML = '<option value="__date" selected>Entregue — informar data da entrega…</option>' +
@@ -1160,7 +1269,6 @@ $('#btnExport').onclick = ()=>{
    ABA PRAZOS DE ENTREGA
    ===================================================================== */
 let pzSort = {k:'transportadora', dir:1}, pzSearch = '';
-const tipoLabel = t => t==='corridos' ? 'Dias corridos' : 'Dias úteis';
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
 const pzAlcance = p => p.cidade ? `${esc(p.cidade)}${p.estado?` / ${esc(p.estado)}`:''}` : p.estado ? `<span class="todas">Todas as cidades de ${esc(p.estado)}</span>` : '<span class="todas">Todas as cidades (padrão)</span>';
 
@@ -1191,11 +1299,11 @@ function renderPrazos(){
     <div class="pzbox"><h3>Prazos cadastrados <small>O sistema procura nesta ordem: cidade + estado → todas as cidades do estado → prazo padrão da transportadora.</small></h3>
       ${list.length ? `<table class="simple"><thead><tr>
         <th data-s="transportadora">Transportadora${arrow('transportadora')}</th><th data-s="cidade">Cidade${arrow('cidade')}</th><th data-s="estado">Estado${arrow('estado')}</th>
-        <th data-s="prazo_dias" class="n">Prazo${arrow('prazo_dias')}</th><th data-s="tipo_dias">Tipo de dias${arrow('tipo_dias')}</th>
+        <th data-s="prazo_dias" class="n">Prazo (dias úteis)${arrow('prazo_dias')}</th>
         <th data-s="uso" class="n">Pedidos usando${arrow('uso')}</th><th></th></tr></thead><tbody>
         ${list.map(p=>`<tr data-pz="${p.id}"><td>${esc(p.transportadora)}</td>
           <td>${p.cidade?esc(p.cidade):p.estado?`<span class="todas">Todas de ${esc(p.estado)}</span>`:'<span class="todas">Todas (padrão)</span>'}</td><td>${esc(p.estado||'')||'<span class="todas">Todos</span>'}</td>
-          <td class="n">${p.prazo_dias} ${p.prazo_dias===1?'dia':'dias'}</td><td>${tipoLabel(p.tipo_dias)}</td><td class="n">${uses.get(p.id)||0}</td>
+          <td class="n">${p.prazo_dias} ${p.prazo_dias===1?'dia':'dias'}</td><td class="n">${uses.get(p.id)||0}</td>
           <td class="act"><button class="btn sm" data-ed="${p.id}">Editar</button> <button class="btn sm danger" data-del="${p.id}">Excluir</button></td></tr>`).join('')}
         </tbody></table>` : `<div class="emptymsg">${prazos.length?'Nada encontrado com essa busca.':'Nenhum prazo cadastrado ainda. Use <b>+ Novo prazo</b> ou <b>Importar prazos</b>.'}</div>`}
     </div>`;
@@ -1208,7 +1316,7 @@ $('#pzBody').addEventListener('click', e=>{
   const mi = e.target.closest('[data-miss]'); if(mi){ const m=$('#pzBody')._miss[+mi.dataset.miss]; return prazoForm({transportadora:m.transportadora, cidade:m.cidade, estado:m.estado}); }
   const ed = e.target.closest('[data-ed]'); if(ed) return prazoForm(prazos.find(p=>p.id===+ed.dataset.ed));
   const del = e.target.closest('[data-del]'); if(del){ const p = prazos.find(x=>x.id===+del.dataset.del);
-    modal('Excluir prazo?', `<p style="margin:0">${esc(p.transportadora)} → ${pzAlcance(p)} (${p.prazo_dias} ${tipoLabel(p.tipo_dias).toLowerCase()}).<br>Pedidos com essa combinação ficam sem prazo automático.</p>`,
+    modal('Excluir prazo?', `<p style="margin:0">${esc(p.transportadora)} → ${pzAlcance(p)} (${p.prazo_dias} dias úteis).<br>Pedidos com essa combinação ficam sem prazo automático.</p>`,
       [{t:'Cancelar'},{t:'Excluir', cls:'danger', fn: async close=>{ close();
         const {error} = await supa.from('prazos_entrega').delete().eq('id', p.id);
         if(error) return toast('Erro: '+error.message, true);
@@ -1233,19 +1341,16 @@ function prazoForm(p){
         <datalist id="dlC">${cids.map(t=>`<option value="${esc(t)}">`).join('')}</datalist></div>
       <div class="field"><label>Estado</label><select id="pfU"><option value="">Todos</option>${UFS.map(u=>`<option ${u===(p.estado||'')?'selected':''}>${u}</option>`).join('')}</select></div>
     </div>
-    <div class="row2">
-      <div class="field"><label>Prazo (dias)</label><input id="pfD" type="number" min="0" step="1" value="${p.prazo_dias ?? ''}"></div>
-      <div class="field"><label>Tipo de dias</label><select id="pfK"><option value="uteis" ${p.tipo_dias!=='corridos'?'selected':''}>Dias úteis</option><option value="corridos" ${p.tipo_dias==='corridos'?'selected':''}>Dias corridos</option></select></div>
-    </div>
+    <div class="field"><label>Prazo (dias úteis)</label><input id="pfD" type="number" min="0" step="1" value="${p.prazo_dias ?? ''}"></div>
     <div class="field"><small>Cidade e estado vazios = prazo padrão da transportadora. Só o estado = vale para todas as cidades dele.<br>
-      O prazo conta a partir da Data Coleta (sem coleta, usa a Data da NF). Dias úteis não contam sábado, domingo e feriados nacionais.</small></div>
+      A previsão conta a partir da Data Coleta e não conta sábado e domingo.</small></div>
     <div class="err" id="pfErr"></div>`;
   const m = modal(p.id ? 'Editar prazo' : 'Novo prazo', body, [
     {t:'Cancelar'},
     {t:'Salvar', cls:'primary', fn: async close=>{
       let cidade = $('#pfC').value.trim(), estado = $('#pfU').value;
       const sc = splitCidade(cidade); if(sc){ cidade = sc.cidade; estado = estado || sc.uf; }
-      const rec = { transportadora: $('#pfT').value.trim(), cidade, estado, prazo_dias: $('#pfD').value==='' ? NaN : Number($('#pfD').value), tipo_dias: $('#pfK').value };
+      const rec = { transportadora: $('#pfT').value.trim(), cidade, estado, prazo_dias: $('#pfD').value==='' ? NaN : Number($('#pfD').value) , tipo_dias: 'uteis' };
       if(!rec.transportadora) return $('#pfErr').textContent = 'Informe a transportadora.';
       if(!Number.isInteger(rec.prazo_dias) || rec.prazo_dias < 0) return $('#pfErr').textContent = 'Informe o prazo em dias (número inteiro).';
       const dup = prazoMap.get(pzKey(rec.transportadora, rec.cidade, rec.estado));
@@ -1282,7 +1387,7 @@ $('#pzFile').addEventListener('change', async e=>{
     let c = iC>=0 ? String(r[iC] ?? '').trim() : '', u = iU>=0 ? String(r[iU] ?? '').trim().toUpperCase() : '';
     const sc = splitCidade(c); if(sc){ c = sc.cidade; u = u || sc.uf; }
     if(u && !UFS.includes(u)){ bad++; return; }
-    const k = iK>=0 && /corr/i.test(String(r[iK]||'')) ? 'corridos' : 'uteis';
+    const k = 'uteis';
     recs.set(pzKey(t,c,u), {transportadora:t, cidade:c, estado:u, prazo_dias:d, tipo_dias:k});
   });
   const list = [...recs.entries()];
@@ -1290,7 +1395,7 @@ $('#pzFile').addEventListener('change', async e=>{
   const upd = list.filter(([key])=>prazoMap.has(key)), ins = list.filter(([key])=>!prazoMap.has(key));
   modal('Importar prazos', `<div class="kv"><span>Prazos na planilha</span><b>${list.length}</b><span>Novos</span><b>${ins.length}</b>
       <span>Já cadastrados (serão atualizados)</span><b>${upd.length}</b>${bad?`<span>Linhas ignoradas</span><b>${bad}</b>`:''}</div>
-      <div class="warn">Colunas lidas: Transportadora, Cidade, Estado, Prazo em Dias e Tipo de Dias (Úteis ou Corridos; vazio = úteis). Cidade e estado vazios = prazo padrão da transportadora.</div>`,
+      <div class="warn">Colunas lidas: Transportadora, Cidade, Estado e Prazo em Dias (dias úteis). Cidade e estado vazios = prazo padrão da transportadora.</div>`,
     [{t:'Cancelar'},{t:'Importar', cls:'primary', fn: async (close, ov)=>{
       ov.dataset.lock=1; ov.querySelectorAll('.ft .btn').forEach(b=>b.disabled=true);
       for(let i=0;i<ins.length;i+=500){
@@ -1306,8 +1411,8 @@ $('#pzFile').addEventListener('change', async e=>{
 });
 $('#pzExport').onclick = ()=>{
   const list = [...prazos].sort((a,b)=>a.transportadora.localeCompare(b.transportadora,'pt-BR')||String(a.estado).localeCompare(String(b.estado))||a.cidade.localeCompare(b.cidade,'pt-BR'));
-  const aoa = [['Transportadora','Cidade','Estado','Prazo em Dias','Tipo de Dias']].concat(list.map(p=>[p.transportadora, p.cidade||null, p.estado||null, p.prazo_dias, p.tipo_dias==='corridos'?'Corridos':'Úteis']));
-  writeXlsx(aoa, ['text','text','text','int','text'], [36,28,10,14,14], 'Prazos', `prazos_entrega_${stampName()}.xlsx`);
+  const aoa = [['Transportadora','Cidade','Estado','Prazo em Dias']].concat(list.map(p=>[p.transportadora, p.cidade||null, p.estado||null, p.prazo_dias]));
+  writeXlsx(aoa, ['text','text','text','int'], [36,28,10,14], 'Prazos', `prazos_entrega_${stampName()}.xlsx`);
 };
 
 /* ---------------- dados ---------------- */
@@ -1373,7 +1478,8 @@ async function start(){
     if(!session){ show('#scrLogin'); return; }
     if(started) return; started = true;
     $('#userEmail').textContent = session.user?.email || '';
-    show('#scrApp'); setTab(ls.get(LS_TAB)==='prazos' ? 'prazos' : 'pedidos'); loadAll(); subscribeRealtime();
+    show('#scrApp');
+    loadPrefs(session.user.id).finally(()=>{ setTab(ls.get(LS_TAB)==='prazos' ? 'prazos' : 'pedidos'); loadAll(); subscribeRealtime(); });
   };
   supa.auth.onAuthStateChange((ev, session)=>{ if(ev==='SIGNED_OUT'){ started=false; show('#scrLogin'); } else if(session) enter(session); });
   const {data:{session}} = await supa.auth.getSession();
