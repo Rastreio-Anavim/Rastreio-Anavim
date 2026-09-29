@@ -11,214 +11,224 @@
     document.documentElement.setAttribute('data-theme', t); })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
+/* ======== Identidade La Vie Vin: vinho, creme, marrom · Montserrat ======== */
 :root{
-  --navy:#121F3A; --navy-2:#1C2C4F; --orange:#E2892A; --teal:#659EA0;
-  --bg:#F3F4F7; --panel:#FFFFFF; --panel-2:#EEF1F6; --row-alt:#FBFCFD; --input:#FFFFFF;
-  --line:#DDE1E8; --line-2:#EDF0F4; --line-3:#CBD2DD;
-  --text:#1B2233; --text-2:#3A4660; --muted:#667085; --faint:#B5BCC8;
-  --hover:#F4F7FB; --sel:#FFF4E8; --warn-bg:#FFF4E8; --warn-line:#F2D2AE;
-  --ok:#2E8B57; --err:#C0392B; --ok-bg:#E4F3EA; --shadow:rgba(18,31,58,.22);
-  --header:#121F3A; --header-line:#3A4B70;
+  --wine:#5E2D2B; --wine-2:#571313; --cream:#F1ECC5; --brown:#532B06; --gold:#9A7B4F;
+  --accent:#5E2D2B; --on-accent:#F1ECC5;
+  --bg:#F1ECC5; --panel:#FFFDF4; --panel-2:#F6F0D6; --row-alt:#FBF7E6; --input:#FFFEF8;
+  --line:#E0D5AE; --line-2:#ECE4C6; --line-3:#CDBE8F;
+  --text:#212121; --text-2:#532B06; --muted:#7A6A55; --faint:#B9AC8C;
+  --hover:#F7F0D3; --sel:#F3E2D2; --warn-bg:#F8EBD6; --warn-line:#E6CFA8;
+  --ok:#2E7D4F; --err:#A3302A; --ok-bg:#E3F0E2; --shadow:rgba(83,43,6,.18);
+  --header:#5E2D2B; --header-line:rgba(241,236,197,.35); --header-text:#F1ECC5; --header-muted:rgba(241,236,197,.62);
   color-scheme:light;
 }
 [data-theme="dark"]{
-  --bg:#0D1424; --panel:#141D31; --panel-2:#1B2640; --row-alt:#172035; --input:#0F1729;
-  --line:#28344F; --line-2:#212C45; --line-3:#35425F;
-  --text:#E4E8F0; --text-2:#C3CBDA; --muted:#8C97AD; --faint:#566079;
-  --hover:#1D2842; --sel:#3A2A17; --warn-bg:#33261A; --warn-line:#5C4326;
-  --ok-bg:#16352A; --shadow:rgba(0,0,0,.5);
-  --header:#0A101D; --header-line:#2A3754;
+  --accent:#C9A96E; --on-accent:#2A1311;
+  --bg:#170C0B; --panel:#221312; --panel-2:#2C1817; --row-alt:#261514; --input:#1B0F0E;
+  --line:#43292A; --line-2:#352020; --line-3:#5A3A38;
+  --text:#F1ECC5; --text-2:#E4D6A8; --muted:#B39E82; --faint:#6E5A4A;
+  --hover:#321D1C; --sel:#46261F; --warn-bg:#3A2616; --warn-line:#6A4A28;
+  --ok-bg:#1D3326; --shadow:rgba(0,0,0,.55);
+  --header:#3A1917; --header-line:rgba(241,236,197,.25);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{background:var(--bg);color:var(--text);font:14px/1.35 'Barlow',system-ui,sans-serif}
+body{background:var(--bg);color:var(--text);font:13.5px/1.4 'Montserrat',system-ui,sans-serif}
 button,input,select,textarea{font:inherit;color:inherit}
 input,select,textarea{background:var(--input)}
 .hidden{display:none!important}
+.tnum,td.num .c,td.id .c,.count,.chip b,.kv b,.simple td.n{font-variant-numeric:tabular-nums}
 
 /* ---------- topo ---------- */
-header{background:var(--header);color:#fff;display:flex;align-items:center;gap:16px;padding:8px 18px;border-bottom:3px solid var(--orange);min-height:62px}
-.brand{display:flex;align-items:center;gap:14px}
-.brand img{height:40px;display:block}
-.brand .sep{width:1px;height:34px;background:rgba(255,255,255,.22)}
-.brand h1{font:700 22px/1 'Barlow Condensed',sans-serif;letter-spacing:.5px;margin:0;text-transform:uppercase}
-.brand h1 span{color:var(--orange)}
-.brand small{display:block;font:500 11px 'DM Mono',monospace;color:#AEB8CC;letter-spacing:.8px;margin-top:4px}
-.tabs{display:flex;gap:4px;margin-left:18px;align-self:stretch;align-items:flex-end}
-.tab{background:transparent;border:0;color:#AEB8CC;font:600 15px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.5px;padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-11px}
-.tab:hover{color:#fff}
-.tab.on{color:#fff;border-bottom-color:#fff}
-.tab b{font:500 11px 'DM Mono',monospace;background:var(--err);color:#fff;border-radius:99px;padding:1px 6px;margin-left:4px;vertical-align:2px}
+header{background:var(--header);color:var(--header-text);display:flex;align-items:center;gap:18px;padding:10px 26px;min-height:66px;border-radius:0 0 28px 28px;box-shadow:0 6px 18px rgba(40,10,8,.18);position:relative;z-index:6}
+.brand{display:flex;align-items:center;gap:16px}
+.brand img{height:38px;display:block}
+.brand .sep{width:1px;height:32px;background:var(--header-line)}
+.brand h1{font:400 17px/1 'Montserrat',sans-serif;letter-spacing:1.6px;margin:0;text-transform:uppercase}
+.brand small{display:block;font:500 10px 'Montserrat',sans-serif;color:var(--header-muted);letter-spacing:1.8px;margin-top:5px;text-transform:uppercase}
+.tabs{display:flex;gap:6px;margin-left:22px;align-self:stretch;align-items:flex-end}
+.tab{background:transparent;border:0;color:var(--header-muted);font:500 12px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1.4px;padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-10px}
+.tab:hover{color:var(--header-text)}
+.tab.on{color:var(--header-text);border-bottom-color:var(--cream)}
+.tab b{font:600 10.5px 'Montserrat',sans-serif;background:var(--cream);color:var(--wine);border-radius:99px;padding:1px 7px;margin-left:5px;vertical-align:1px;letter-spacing:0}
 header .grow{flex:1}
-.user{font:12px 'DM Mono',monospace;color:#C7CFDD}
-.btn{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:7px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-weight:500}
-.btn:hover{border-color:var(--line-3);background:var(--hover)}
-.btn.primary{background:var(--orange);border-color:var(--orange);color:#fff}
-.btn.primary:hover{filter:brightness(.95);background:var(--orange)}
-.btn.dark{background:transparent;border-color:var(--header-line);color:#fff}
-.btn.dark:hover{background:var(--navy-2)}
-.btn.icon{padding:7px 9px}
-.btn.danger{color:var(--err);border-color:color-mix(in srgb,var(--err) 35%,var(--line))}
-.btn.sm{padding:4px 9px;font-size:12.5px}
-.btn:disabled{opacity:.5;cursor:not-allowed}
+.user{font:500 11.5px 'Montserrat',sans-serif;color:var(--header-muted);letter-spacing:.3px}
+.btn{border:1.5px solid var(--line-3);background:transparent;border-radius:999px;padding:7px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font:500 12px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.8px;color:var(--text-2)}
+.btn:hover{border-color:var(--text-2);background:var(--hover)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{filter:brightness(1.08);background:var(--accent)}
+.btn.dark{background:transparent;border-color:var(--header-line);color:var(--header-text)}
+.btn.dark:hover{background:rgba(241,236,197,.1);border-color:var(--cream)}
+.btn.icon{padding:7px 10px}
+.btn.danger{color:var(--err);border-color:color-mix(in srgb,var(--err) 40%,var(--line))}
+.btn.sm{padding:4px 11px;font-size:11px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .btn svg{width:15px;height:15px}
 
 /* ---------- barra de ferramentas ---------- */
-.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:16px 26px 10px;background:transparent}
 .search{position:relative}
-.search input{width:280px;padding:7px 10px 7px 30px;border:1px solid var(--line);border-radius:6px}
-.search svg{position:absolute;left:9px;top:9px;width:14px;height:14px;color:var(--muted)}
-.count{font:12px 'DM Mono',monospace;color:var(--muted);margin-left:auto}
-.chips{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.search input{width:300px;padding:8px 14px 8px 34px;border:1.5px solid var(--line-3);border-radius:999px;outline:0}
+.search input:focus{border-color:var(--text-2)}
+.search svg{position:absolute;left:13px;top:10px;width:14px;height:14px;color:var(--muted)}
+.count{font:500 11.5px 'Montserrat',sans-serif;color:var(--muted);margin-left:auto;letter-spacing:.3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px 18px;padding:6px 26px;background:transparent}
 .chipgrp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.chipgrp>em{font:600 12px 'Barlow Condensed',sans-serif;text-transform:uppercase;color:var(--muted);font-style:normal;margin-right:2px}
-.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:3px 10px 3px 8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12.5px}
-.chip b{font:500 12px 'DM Mono',monospace}
+.chipgrp>em{font:600 10.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-2);font-style:normal;margin-right:4px}
+.chip{border:1px solid var(--line-3);background:var(--panel);border-radius:999px;padding:3px 11px 3px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12px}
+.chip b{font-weight:600;font-size:11.5px;color:var(--muted)}
 .chip i{width:8px;height:8px;border-radius:50%;display:inline-block}
-.chip.on{border-color:var(--orange);box-shadow:inset 0 0 0 1px var(--orange)}
-.pbtn{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:4px 11px;cursor:pointer;font:500 13px 'Barlow',sans-serif}
-.pbtn:hover:not(:disabled){border-color:var(--line-3);background:var(--hover)}
-.pbtn.on,.pbtn.on:hover:not(:disabled){background:var(--navy);border-color:var(--navy);color:#fff}
-[data-theme="dark"] .pbtn.on,[data-theme="dark"] .pbtn.on:hover:not(:disabled){background:var(--orange);border-color:var(--orange)}
+.chip.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.pbtn{border:1px solid var(--line-3);background:var(--panel);border-radius:999px;padding:4px 12px;cursor:pointer;font:500 12px 'Montserrat',sans-serif}
+.pbtn:hover:not(:disabled){border-color:var(--text-2);background:var(--hover)}
+.pbtn.on,.pbtn.on:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .pbtn:disabled{opacity:.35;cursor:default}
-.period{gap:8px 22px;align-items:center}
-.ptip{font-size:11.5px;color:var(--muted);margin-left:auto}
-.bulk{display:flex;align-items:center;gap:8px;padding:8px 18px;background:var(--warn-bg);border-bottom:1px solid var(--warn-line);font-size:13px}
-.bulk select{padding:6px 8px;border:1px solid var(--line);border-radius:6px}
+.period{gap:8px 24px;align-items:center;padding-top:4px}
+.ptip{font-size:11px;color:var(--muted);margin-left:auto}
+.bulk{display:flex;align-items:center;gap:8px;margin:6px 26px 0;padding:8px 14px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:14px;font-size:12.5px}
+.bulk select{padding:6px 10px;border:1px solid var(--line-3);border-radius:999px}
 
 /* ---------- tabela ---------- */
-.wrap{position:absolute;left:0;right:0;bottom:0;overflow:auto;background:var(--panel)}
+.wrap{position:absolute;left:26px;right:26px;bottom:16px;overflow:auto;background:var(--panel);border:1px solid var(--line-3);border-radius:20px}
 table.grid{border-collapse:separate;border-spacing:0;table-layout:fixed;width:max-content;min-width:100%}
 .grid th,.grid td{border-right:1px solid var(--line-2);border-bottom:1px solid var(--line-2);padding:0;text-align:left;vertical-align:top}
-.grid thead th{position:sticky;top:0;z-index:3;background:var(--panel-2);border-bottom:1px solid var(--line);height:38px;vertical-align:middle;user-select:none}
-th .h{display:flex;align-items:center;height:100%;padding:0 4px 0 9px;gap:4px}
-th .lbl{flex:1;font:600 13px/1.1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.3px;color:var(--text-2);cursor:grab;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:6px 0}
+.grid thead th{position:sticky;top:0;z-index:3;background:var(--panel-2);border-bottom:1px solid var(--line-3);height:42px;vertical-align:middle;user-select:none}
+th .h{display:flex;align-items:center;height:100%;padding:0 5px 0 11px;gap:4px}
+th .lbl{flex:1;font:600 10.5px/1.15 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.9px;color:var(--text-2);cursor:grab;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:6px 0}
 th .lbl:active{cursor:grabbing}
-th .srt{font-size:10px;color:var(--orange)}
-.fbtn{width:24px;height:22px;border:1px solid var(--line-3);background:var(--panel);border-radius:4px;cursor:pointer;display:grid;place-items:center;padding:0;flex:none}
-.fbtn svg{width:11px;height:11px;color:var(--muted)}
-.fbtn.on{background:var(--orange);border-color:var(--orange)}
-.fbtn.on svg{color:#fff}
+th .srt{font-size:9px;color:var(--accent)}
+.fbtn{width:24px;height:22px;border:1px solid var(--line-3);background:var(--panel);border-radius:6px;cursor:pointer;display:grid;place-items:center;padding:0;flex:none}
+.fbtn svg{width:10px;height:10px;color:var(--muted)}
+.fbtn.on{background:var(--accent);border-color:var(--accent)}
+.fbtn.on svg{color:var(--on-accent)}
 .rz{position:absolute;right:-3px;top:0;bottom:0;width:7px;cursor:col-resize;z-index:4}
-th.drop-l{box-shadow:inset 3px 0 0 var(--orange)}
-th.drop-r{box-shadow:inset -3px 0 0 var(--orange)}
-.selc{width:36px;text-align:center;position:sticky;left:0;z-index:2;background:inherit}
+th.drop-l{box-shadow:inset 3px 0 0 var(--accent)}
+th.drop-r{box-shadow:inset -3px 0 0 var(--accent)}
+.selc{width:38px;text-align:center;position:sticky;left:0;z-index:2;background:inherit}
 .grid thead th.selc{z-index:5;background:var(--panel-2)}
+.grid input[type=checkbox]{accent-color:var(--wine)}
+[data-theme="dark"] .grid input[type=checkbox]{accent-color:var(--accent)}
 .grid tbody tr{background:var(--panel)}
 .grid tbody tr:nth-child(even){background:var(--row-alt)}
 .grid tbody tr:hover{background:var(--hover)}
 .grid tbody tr.sel{background:var(--sel)}
-td .c{padding:7px 9px;min-height:33px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td .c{padding:8px 11px;min-height:35px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 body.wrap-text td.long .c{white-space:pre-wrap;word-break:break-word}
-td.num .c{text-align:right;font-family:'DM Mono',monospace;font-size:12.5px}
-td.id .c{font-family:'DM Mono',monospace;font-size:12.5px}
+td.num .c{text-align:right;font-size:12.5px}
+td.id .c{font-size:12.5px}
 td.ro .c{color:var(--muted);font-size:12.5px}
 td[data-k]:not(.ro):not(.st){cursor:cell}
 td.empty .c{color:var(--faint)}
+td.typed .c{border:1px dashed var(--line-3);border-radius:8px;margin:3px;min-height:29px;padding:4px 8px}
+td.typed.empty .c:before{content:'dd/mm/aaaa';color:var(--faint);font-size:11.5px}
 td.man .c{position:relative;font-style:italic}
-td.man .c:after{content:'';position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--orange)}
-td.saving{outline:2px solid var(--teal);outline-offset:-2px}
+td.man .c:after{content:'';position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+td.saving{outline:2px solid var(--gold);outline-offset:-2px}
 td.saved{animation:flash 1s}
 @keyframes flash{from{background:var(--ok-bg)}to{background:transparent}}
 td.st .c{padding:4px 6px;display:flex;align-items:center;gap:4px}
-.stsel{flex:1;min-width:0;border:1px solid transparent;border-radius:999px;padding:4px 22px 4px 8px;font-weight:600;font-size:12.5px;cursor:pointer;appearance:none;-webkit-appearance:none;
+.stsel{flex:1;min-width:0;border:1px solid transparent;border-radius:999px;padding:5px 22px 5px 10px;font:600 11.5px 'Montserrat',sans-serif;cursor:pointer;appearance:none;-webkit-appearance:none;
   color:var(--c);background-color:var(--b);
   background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 9px) 50%;background-size:4px 4px;background-repeat:no-repeat}
 .stsel option{color:var(--text);background:var(--panel)}
-.pill{display:inline-block;border-radius:999px;padding:2px 9px;font-weight:600;font-size:12px;color:var(--c);background:var(--b)}
-[data-theme="dark"] .stsel,[data-theme="dark"] .pill{color:color-mix(in srgb,var(--c) 45%,#fff);background-color:color-mix(in srgb,var(--c) 30%,transparent)}
-td.sit .c{padding:6px 8px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-weight:600;font-size:11.5px;color:var(--c);background:var(--b)}
+[data-theme="dark"] .stsel,[data-theme="dark"] .pill{color:color-mix(in srgb,var(--c) 40%,#F1ECC5);background-color:color-mix(in srgb,var(--c) 32%,transparent)}
+td.sit .c{padding:7px 9px}
 .hist{border:0;background:transparent;cursor:pointer;color:var(--muted);padding:2px;display:grid;place-items:center}
-.hist:hover{color:var(--orange)}
+.hist:hover{color:var(--accent)}
 .hist svg{width:14px;height:14px}
 .more{padding:14px;text-align:center}
 .emptymsg{padding:60px 20px;text-align:center;color:var(--muted)}
 
 /* ---------- aba de prazos ---------- */
-.pz{position:absolute;left:0;right:0;bottom:0;overflow:auto;padding:16px 18px 40px}
-.pzbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:16px;overflow:hidden}
-.pzbox h3{margin:0;padding:12px 16px;font:700 16px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:10px}
-.pzbox h3 small{font:400 12.5px 'Barlow',sans-serif;text-transform:none;color:var(--muted);letter-spacing:0}
+.pz{position:absolute;left:0;right:0;bottom:0;overflow:auto;padding:8px 26px 40px}
+.pzbox{background:var(--panel);border:1px solid var(--line-3);border-radius:20px;margin-bottom:18px;overflow:hidden}
+.pzbox h3{margin:0;padding:14px 18px;font:500 14px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-2);border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pzbox h3 small{font:400 12px 'Montserrat',sans-serif;text-transform:none;color:var(--muted);letter-spacing:0}
 .pzbox.alert h3{color:var(--err)}
 table.simple{width:100%;border-collapse:collapse}
-.simple th{text-align:left;font:600 12.5px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.3px;color:var(--text-2);background:var(--panel-2);padding:8px 12px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap;user-select:none}
-.simple td{padding:7px 12px;border-bottom:1px solid var(--line-2)}
+.simple th{text-align:left;font:600 10.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.9px;color:var(--text-2);background:var(--panel-2);padding:9px 14px;border-bottom:1px solid var(--line-2);cursor:pointer;white-space:nowrap;user-select:none}
+.simple td{padding:8px 14px;border-bottom:1px solid var(--line-2)}
 .simple tr:hover td{background:var(--hover)}
-.simple td.n{font-family:'DM Mono',monospace;font-size:12.5px;text-align:right}
+.simple td.n{font-size:12.5px;text-align:right}
 .simple th.n{text-align:right}
 .simple td.act{text-align:right;white-space:nowrap}
 .simple .todas{color:var(--muted);font-style:italic}
 
 /* ---------- editor ---------- */
-.editor{position:fixed;z-index:50;background:var(--panel);border:2px solid var(--orange);border-radius:4px;box-shadow:0 8px 24px var(--shadow)}
-.editor input,.editor textarea{width:100%;border:0;outline:0;padding:7px 9px;background:transparent;display:block}
-.editor textarea{min-height:130px;resize:vertical;line-height:1.4}
-.editor .hint{font:11px 'DM Mono',monospace;color:var(--muted);padding:4px 9px;border-top:1px solid var(--line-2)}
+.editor{position:fixed;z-index:50;background:var(--panel);border:2px solid var(--accent);border-radius:8px;box-shadow:0 10px 26px var(--shadow);overflow:hidden}
+.editor input,.editor textarea{width:100%;border:0;outline:0;padding:7px 10px;background:transparent;display:block}
+.editor textarea{min-height:130px;resize:vertical;line-height:1.45}
+.editor .hint{font:500 10.5px 'Montserrat',sans-serif;color:var(--muted);padding:4px 10px;border-top:1px solid var(--line-2)}
 
 /* ---------- menu de filtro ---------- */
-.fmenu{position:fixed;z-index:60;width:290px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 32px var(--shadow);font-size:13px;display:flex;flex-direction:column;max-height:min(520px,calc(100vh - 20px))}
-.fmenu .it{display:flex;align-items:center;gap:8px;padding:7px 12px;cursor:pointer;border:0;background:none;width:100%;text-align:left}
+.fmenu{position:fixed;z-index:60;width:300px;background:var(--panel);border:1px solid var(--line-3);border-radius:14px;box-shadow:0 14px 34px var(--shadow);font-size:12.5px;display:flex;flex-direction:column;max-height:min(520px,calc(100vh - 20px));overflow:hidden}
+.fmenu .it{display:flex;align-items:center;gap:8px;padding:8px 14px;cursor:pointer;border:0;background:none;width:100%;text-align:left}
 .fmenu .it:hover{background:var(--hover)}
 .fmenu .it:disabled{color:var(--faint);cursor:default;background:none}
 .fmenu hr{border:0;border-top:1px solid var(--line-2);margin:4px 0}
-.fmenu .fs{padding:6px 12px}
-.fmenu .fs input{width:100%;padding:6px 9px;border:1px solid var(--line);border-radius:5px}
-.fmenu .list{overflow:auto;margin:0 12px;border:1px solid var(--line-2);border-radius:5px;min-height:80px;flex:1}
-.fmenu label{display:flex;align-items:center;gap:8px;padding:4px 8px;cursor:pointer;white-space:nowrap}
+.fmenu .fs{padding:6px 14px}
+.fmenu .fs input{width:100%;padding:7px 12px;border:1px solid var(--line-3);border-radius:999px;outline:0}
+.fmenu .list{overflow:auto;margin:0 14px;border:1px solid var(--line-2);border-radius:10px;min-height:80px;flex:1}
+.fmenu label{display:flex;align-items:center;gap:8px;padding:4px 9px;cursor:pointer;white-space:nowrap}
+.fmenu label input{accent-color:var(--wine)}
 .fmenu label:hover{background:var(--hover)}
 .fmenu label span{flex:1;overflow:hidden;text-overflow:ellipsis}
-.fmenu label em{font:normal 11px 'DM Mono',monospace;color:var(--muted)}
-.fmenu .ft{display:flex;justify-content:flex-end;gap:8px;padding:10px 12px}
-.fmenu .note{font-size:11.5px;color:var(--muted);padding:4px 12px 0}
+.fmenu label em{font-style:normal;font-size:11px;color:var(--muted)}
+.fmenu .ft{display:flex;justify-content:flex-end;gap:8px;padding:10px 14px}
+.fmenu .note{font-size:11px;color:var(--muted);padding:4px 14px 0}
 
 /* ---------- modais ---------- */
-.ov{position:fixed;inset:0;background:rgba(5,10,20,.55);z-index:80;display:grid;place-items:center;padding:16px}
-.modal{background:var(--panel);border-radius:10px;width:min(560px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-.modal h2{font:700 19px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.4px;margin:0;padding:16px 20px;border-bottom:1px solid var(--line-2)}
-.modal .bd{padding:16px 20px;overflow:auto}
-.modal .ft{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px;border-top:1px solid var(--line-2);flex-wrap:wrap}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13.5px}
-.kv b{font:500 13px 'DM Mono',monospace}
-.warn{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:6px;padding:8px 10px;font-size:12.5px;margin-top:12px}
+.ov{position:fixed;inset:0;background:rgba(30,10,8,.55);z-index:80;display:grid;place-items:center;padding:16px}
+.modal{background:var(--panel);border-radius:22px;width:min(560px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 22px 54px rgba(0,0,0,.35);border:1px solid var(--line-3);overflow:hidden}
+.modal h2{font:500 15px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1.4px;margin:0;padding:18px 22px;border-bottom:1px solid var(--line-2);color:var(--text-2)}
+.modal .bd{padding:18px 22px;overflow:auto}
+.modal .ft{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid var(--line-2);flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:7px 18px;font-size:13px}
+.kv b{font-weight:600}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:12px;padding:9px 12px;font-size:12px;margin-top:12px}
 .prog{height:8px;background:var(--line-2);border-radius:99px;overflow:hidden;margin-top:14px}
-.prog div{height:100%;width:0;background:var(--teal);transition:width .2s}
+.prog div{height:100%;width:0;background:var(--accent);transition:width .2s}
 .colist{list-style:none;margin:0;padding:0}
-.colist li{display:flex;align-items:center;gap:10px;padding:7px 8px;border:1px solid var(--line-2);border-radius:6px;margin-bottom:5px;background:var(--panel);cursor:grab}
+.colist li{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--line-2);border-radius:12px;margin-bottom:5px;background:var(--panel);cursor:grab}
+.colist li input{accent-color:var(--wine)}
 .colist li.dragging{opacity:.4}
 .colist .grip{color:var(--faint);font-size:14px;letter-spacing:-2px}
 .colist li span{flex:1}
-.colist li small{color:var(--muted);font-size:11px}
+.colist li small{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.8px}
 .timeline{list-style:none;margin:0;padding:0}
-.timeline li{border-left:2px solid var(--line);padding:0 0 14px 14px;position:relative}
-.timeline li:before{content:'';position:absolute;left:-6px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--teal)}
-.timeline .when{font:12px 'DM Mono',monospace;color:var(--muted)}
+.timeline li{border-left:2px solid var(--line-3);padding:0 0 14px 14px;position:relative}
+.timeline li:before{content:'';position:absolute;left:-6px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.timeline .when{font-size:11.5px;color:var(--muted)}
 .timeline .obs{font-size:12.5px;color:var(--text-2);margin-top:2px;white-space:pre-wrap}
 
 /* ---------- telas de acesso ---------- */
-.gate{min-height:100vh;display:grid;place-items:center;background:var(--navy);padding:16px}
-.card{background:var(--panel);border-radius:12px;padding:28px;width:min(400px,100%);box-shadow:0 20px 50px rgba(0,0,0,.35);border-top:4px solid var(--orange)}
-.card .logo{background:var(--navy);border-radius:8px;padding:12px;display:grid;place-items:center;margin-bottom:18px}
+.gate{min-height:100vh;display:grid;place-items:center;background:var(--wine);padding:16px;background-image:radial-gradient(circle at 20% 10%,rgba(241,236,197,.08),transparent 45%),radial-gradient(circle at 85% 90%,rgba(87,19,19,.6),transparent 50%)}
+.card{background:var(--panel);border-radius:26px;padding:30px;width:min(410px,100%);box-shadow:0 24px 60px rgba(0,0,0,.4);border:1px solid var(--line-3)}
+.card .logo{background:var(--wine);border-radius:18px;padding:16px;display:grid;place-items:center;margin-bottom:20px}
 .card .logo img{height:44px}
-.card h2{font:700 24px 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:0 0 4px}
-.card p{margin:0 0 18px;color:var(--muted);font-size:13px}
-.field{margin-bottom:12px}
-.field label{display:block;font:600 12px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.4px;color:var(--text-2);margin-bottom:4px}
-.field input,.field select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:6px}
-.field small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.card h2{font:400 20px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1.6px;margin:0 0 4px;color:var(--text-2)}
+.card p{margin:0 0 20px;color:var(--muted);font-size:12px;letter-spacing:1px;text-transform:uppercase}
+.field{margin-bottom:13px}
+.field label{display:block;font:600 10.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--text-2);margin-bottom:5px}
+.field input,.field select{width:100%;padding:9px 14px;border:1.5px solid var(--line-3);border-radius:999px;outline:0}
+.field input:focus,.field select:focus{border-color:var(--text-2)}
+.field small{display:block;color:var(--muted);font-size:11.5px;margin-top:4px;line-height:1.45}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card .btn{width:100%;justify-content:center;padding:10px}
-.link{background:none;border:0;color:var(--teal);cursor:pointer;font-size:12.5px;margin-top:12px;padding:0}
-.err{color:var(--err);font-size:13px;min-height:18px;margin-bottom:6px}
+.card .btn{width:100%;justify-content:center;padding:11px}
+.link{background:none;border:0;color:var(--gold);cursor:pointer;font-size:12px;margin-top:14px;padding:0}
+.err{color:var(--err);font-size:12.5px;min-height:18px;margin-bottom:6px}
 
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:8px;z-index:100;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:90vw;border:1px solid var(--header-line)}
-.toast.err{background:var(--err);border-color:var(--err)}
-.loading{position:fixed;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 70%,transparent);z-index:70;font:600 16px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.5px}
-@media (max-width:900px){.search input{width:180px}.brand small,.brand .sep{display:none}header{flex-wrap:wrap}.tabs{margin-left:0}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--wine);color:var(--cream);padding:11px 20px;border-radius:999px;z-index:100;font-size:12.5px;box-shadow:0 10px 26px rgba(0,0,0,.28);max-width:90vw;border:1px solid rgba(241,236,197,.25)}
+.toast.err{background:var(--err);border-color:var(--err);border-radius:18px}
+.loading{position:fixed;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 70%,transparent);z-index:70;font:500 13px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:2px;color:var(--text-2)}
+@media (max-width:900px){.search input{width:200px}.brand small,.brand .sep{display:none}header{flex-wrap:wrap;border-radius:0 0 20px 20px}.tabs{margin-left:0}.wrap{left:10px;right:10px}.toolbar,.chips{padding-left:12px;padding-right:12px}}
 </style>
 </head>
 <body>
@@ -255,7 +265,7 @@ table.simple{width:100%;border-collapse:collapse}
     <div class="brand">
       <img src="data:image/png;base64,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" alt="La Vie Vin">
       <span class="sep"></span>
-      <div><h1>Rastreio de <span>Pedidos</span></h1><small>ANAVIM · GRUPO MAUER</small></div>
+      <div><h1>Rastreio de Pedidos</h1><small>ANAVIM · Grupo Mauer</small></div>
     </div>
     <nav class="tabs">
       <button class="tab on" data-tab="pedidos">Pedidos</button>
@@ -331,8 +341,10 @@ const SUPABASE_ANON_KEY = 'sb_publishable_IxQrYuw7Hhmkb8qbu6flVg_H0M8ivyG';
 const STATUS_ENTREGA = [
   { v:'Em trânsito',       cor:'#2F6F72', bg:'#E3F0F0' },
   { v:'Saiu para entrega', cor:'#A85F12', bg:'#FCEBD8' },
-  { v:'Entregue dentro do prazo', cor:'#1F7A45', bg:'#DFF2E7' },
-  { v:'Entregue fora do prazo',   cor:'#B5541C', bg:'#F8E3D5' },
+  { v:'Entregue adiantado', cor:'#1B6E6A', bg:'#DCEFEA' },
+  { v:'Entregue no prazo',  cor:'#2E7D4F', bg:'#E1F0E1' },
+  { v:'Entregue atrasado',  cor:'#A3302A', bg:'#F6DEDA' },
+  { v:'Entregue',           cor:'#6B5B45', bg:'#EEE6CF' },   // entregue sem previsão de entrega
   { v:'Ocorrência',        cor:'#B03226', bg:'#F9E1DE' },
   { v:'Devolvido',         cor:'#6B3F96', bg:'#EEE5F7' },
   { v:'Pendente',          cor:'#667085', bg:'#EEF0F3' },
@@ -342,8 +354,9 @@ const SITUACAO = [
   { v:'Atrasado',            cor:'#B03226', bg:'#F9E1DE' },
   { v:'Vence hoje',          cor:'#A85F12', bg:'#FCEBD8' },
   { v:'No prazo',            cor:'#1F7A45', bg:'#DFF2E7' },
-  { v:'Entregue no prazo',   cor:'#1F7A45', bg:'#DFF2E7' },
-  { v:'Entregue com atraso', cor:'#8E4A1C', bg:'#F6E4D6' },
+  { v:'Entregue adiantado',  cor:'#1B6E6A', bg:'#DCEFEA' },
+  { v:'Entregue no prazo',   cor:'#2E7D4F', bg:'#E1F0E1' },
+  { v:'Entregue atrasado',   cor:'#A3302A', bg:'#F6DEDA' },
   { v:'Aguardando coleta',   cor:'#667085', bg:'#EEF0F3' },
   { v:'Sem prazo cadastrado',cor:'#8A6D00', bg:'#FBF3D0' },
 ];
@@ -351,47 +364,47 @@ const SITUACAO = [
 /* Colunas — a ordem aqui é a ordem padrão da tela.
    k = campo · l = título · t = tipo · x = cabeçalho na planilha · edit = campo gravado quando a coluna é calculada */
 const COLS = [
-  {k:'data_emissao_nf',        l:'Data',                  t:'date',     x:'Data Emissao NF',       w:105},
-  {k:'nota',                   l:'Nota',                  t:'id',       x:'Nota',                  w:80},
-  {k:'cliente',                l:'Cliente',               t:'text',     x:'Cliente',               w:250},
-  {k:'endereco_entrega',       l:'Endereço',              t:'long',                                w:320},
-  {k:'cidade',                 l:'Cidade',                t:'text',     x:'Cidade',                w:150},
-  {k:'estado',                 l:'Estado',                t:'text',     x:'Estado', xs:['UF'], upper:true, w:72},
-  {k:'qtd_itens',              l:'Qtd.Itens',             t:'num',      x:'Qtd.Itens',             w:85},
-  {k:'transportador',          l:'Transportadora',        t:'text',     x:'Transportador', xs:['Transportadora'], w:230},
-  {k:'valor_total_nf',         l:'Valor Total NF',        t:'money',    x:'Valor Total NF',        w:125},
-  {k:'valor_frete_cte',        l:'Valor Frete',           t:'money',    x:'Valor Frete CTE',       w:115},
-  {k:'_prazo_dias',            l:'Prazo de Entrega',      t:'int', unit:true, edit:'prazo_dias_manual',  w:115},
-  {k:'_previsao',              l:'Previsão de Entrega',   t:'date',     edit:'previsao_entrega_manual',   w:135},
-  {k:'data_entrega',           l:'Entregue Dia',          t:'date',                                w:115},
-  {k:'status_entrega',         l:'Status Entrega',        t:'status',                              w:210},
+  {k:'data_emissao_nf',        l:'Data',                  t:'date',     x:'Data Emissao NF',       w:113},
+  {k:'nota',                   l:'Nota',                  t:'id',       x:'Nota',                  w:86},
+  {k:'cliente',                l:'Cliente',               t:'text',     x:'Cliente',               w:270},
+  {k:'endereco_entrega',       l:'Endereço',              t:'long',                                w:346},
+  {k:'cidade',                 l:'Cidade',                t:'text',     x:'Cidade',                w:162},
+  {k:'estado',                 l:'Estado',                t:'text',     x:'Estado', xs:['UF'], upper:true, w:78},
+  {k:'qtd_itens',              l:'Qtd.Itens',             t:'num',      x:'Qtd.Itens',             w:92},
+  {k:'transportador',          l:'Transportadora',        t:'text',     x:'Transportador', xs:['Transportadora'], w:248},
+  {k:'valor_total_nf',         l:'Valor Total NF',        t:'money',    x:'Valor Total NF',        w:135},
+  {k:'valor_frete_cte',        l:'Valor Frete',           t:'money',    x:'Valor Frete CTE',       w:124, hide:true},
+  {k:'_prazo_dias',            l:'Prazo de Entrega',      t:'int', unit:true, edit:'prazo_dias_manual',  w:124},
+  {k:'_previsao',              l:'Previsão de Entrega',   t:'date',     edit:'previsao_entrega_manual',   w:146},
+  {k:'data_entrega',           l:'Entregue Dia',          t:'date',     typed:true,                w:140},
+  {k:'status_entrega',         l:'Status Entrega',        t:'status',                              w:227},
   /* ocultas por padrão (mostre em "Colunas") */
-  {k:'_situacao',              l:'Situação Prazo',        t:'sit',      ro:true,                   w:160, hide:true},
-  {k:'pedido',                 l:'Pedido',                t:'id',       x:'Pedido',                w:92,  hide:true},
-  {k:'vendedor',               l:'Vendedor',              t:'text',     x:'Vendedor',              w:140, hide:true},
-  {k:'data_coleta',            l:'Data Coleta',           t:'datetime', x:'Data Coleta',           w:140, hide:true},
-  {k:'status_logistica',       l:'Status Logistica',      t:'text',     x:'Status Logistica',      w:140, hide:true},
-  {k:'natureza_operacao',      l:'Natureza Operacao',     t:'text',     x:'Natureza Operacao',     w:160, hide:true},
-  {k:'mensagem',               l:'Mensagem',              t:'long',     x:'Mensagem',              w:200, hide:true},
-  {k:'observacao_entrega',     l:'Observação Entrega',    t:'long',                                w:200, hide:true},
-  {k:'empresa',                l:'Empresa',               t:'text',     x:'Empresa',               w:100, hide:true},
-  {k:'tipo_frete',             l:'Tipo Frete',            t:'text',     x:'Tipo Frete',            w:90,  hide:true},
-  {k:'data_pedido',            l:'Data Pedido',           t:'date',     x:'Data Pedido',           w:110, hide:true},
-  {k:'hora_separar',           l:'Hora Separar',          t:'datetime', x:'Hora Separar',          w:140, hide:true},
-  {k:'cod_natureza_operacao',  l:'Cod Natureza Operacao', t:'id',       x:'Cod Natureza Operacao', w:110, hide:true},
-  {k:'hora_emissao_nf',        l:'Hora Emissao NF',       t:'time',     x:'Hora Emissao NF',       w:110, hide:true},
-  {k:'carta_correcao',         l:'Carta Correcao',        t:'long',     x:'Carta Correcao',        w:180, hide:true},
-  {k:'cod_cliente',            l:'Cod Cliente',           t:'id',       x:'Cod',                   w:90,  hide:true},
-  {k:'cubagem',                l:'Cubagem',               t:'num',      x:'Cubagem',               w:90,  hide:true},
-  {k:'peso_total',             l:'Peso Total',            t:'num',      x:'Peso Total',            w:95,  hide:true},
-  {k:'numero_cte',             l:'Numero Cte',            t:'id',       x:'Numero Cte',            w:100, hide:true},
-  {k:'valor_frete_nf',         l:'Valor Frete NF',        t:'money',    x:'Valor Frete NF',        w:120, hide:true},
-  {k:'status_entrega_atualizado_em',  l:'Status Atualizado Em',  t:'ts',   ro:true, w:150, hide:true},
-  {k:'status_entrega_atualizado_por', l:'Status Atualizado Por', t:'text', ro:true, w:180, hide:true},
-  {k:'mensagem_original',      l:'Mensagem Original (planilha)', t:'long', w:280, hide:true},
+  {k:'_situacao',              l:'Situação Prazo',        t:'sit',      ro:true,                   w:173, hide:true},
+  {k:'pedido',                 l:'Pedido',                t:'id',       x:'Pedido',                w:99,  hide:true},
+  {k:'vendedor',               l:'Vendedor',              t:'text',     x:'Vendedor',              w:151, hide:true},
+  {k:'data_coleta',            l:'Data Coleta',           t:'datetime', x:'Data Coleta',           w:151, hide:true},
+  {k:'status_logistica',       l:'Status Logistica',      t:'text',     x:'Status Logistica',      w:151, hide:true},
+  {k:'natureza_operacao',      l:'Natureza Operacao',     t:'text',     x:'Natureza Operacao',     w:173, hide:true},
+  {k:'mensagem',               l:'Mensagem',              t:'long',     x:'Mensagem',              w:216, hide:true},
+  {k:'observacao_entrega',     l:'Observação Entrega',    t:'long',                                w:216, hide:true},
+  {k:'empresa',                l:'Empresa',               t:'text',     x:'Empresa',               w:108, hide:true},
+  {k:'tipo_frete',             l:'Tipo Frete',            t:'text',     x:'Tipo Frete',            w:97,  hide:true},
+  {k:'data_pedido',            l:'Data Pedido',           t:'date',     x:'Data Pedido',           w:119, hide:true},
+  {k:'hora_separar',           l:'Hora Separar',          t:'datetime', x:'Hora Separar',          w:151, hide:true},
+  {k:'cod_natureza_operacao',  l:'Cod Natureza Operacao', t:'id',       x:'Cod Natureza Operacao', w:119, hide:true},
+  {k:'hora_emissao_nf',        l:'Hora Emissao NF',       t:'time',     x:'Hora Emissao NF',       w:119, hide:true},
+  {k:'carta_correcao',         l:'Carta Correcao',        t:'long',     x:'Carta Correcao',        w:194, hide:true},
+  {k:'cod_cliente',            l:'Cod Cliente',           t:'id',       x:'Cod',                   w:97,  hide:true},
+  {k:'cubagem',                l:'Cubagem',               t:'num',      x:'Cubagem',               w:97,  hide:true},
+  {k:'peso_total',             l:'Peso Total',            t:'num',      x:'Peso Total',            w:103,  hide:true},
+  {k:'numero_cte',             l:'Numero Cte',            t:'id',       x:'Numero Cte',            w:108, hide:true},
+  {k:'valor_frete_nf',         l:'Valor Frete NF',        t:'money',    x:'Valor Frete NF',        w:130, hide:true},
+  {k:'status_entrega_atualizado_em',  l:'Status Atualizado Em',  t:'ts',   ro:true, w:162, hide:true},
+  {k:'status_entrega_atualizado_por', l:'Status Atualizado Por', t:'text', ro:true, w:194, hide:true},
+  {k:'mensagem_original',      l:'Mensagem Original (planilha)', t:'long', w:302, hide:true},
 ];
 const COL = Object.fromEntries(COLS.map(c=>[c.k,c]));
-const LS_CFG='rastreio_anavim_cfg', LS_LAYOUT='rastreio_anavim_layout_v3', LS_WRAP='rastreio_anavim_wrap', LS_THEME='rastreio_anavim_tema', LS_TAB='rastreio_anavim_aba';
+const LS_CFG='rastreio_anavim_cfg', LS_LAYOUT='rastreio_anavim_layout_v4', LS_WRAP='rastreio_anavim_wrap', LS_THEME='rastreio_anavim_tema', LS_TAB='rastreio_anavim_aba';
 const PAGE = 300;
 
 /* ---------------- utilidades ---------------- */
@@ -601,6 +614,7 @@ function findPrazo(r){
          prazoMap.get(pzKey(t, '', r.estado)) || prazoMap.get(pzKey(t, '', '')) || null;
 }
 const isEntregue = v => /^entregue/i.test(v||'');
+const deliveredStatus = (ent, prev) => !prev ? 'Entregue' : ent < prev ? 'Entregue adiantado' : ent === prev ? 'Entregue no prazo' : 'Entregue atrasado';
 /* separa "São Paulo / SP" em cidade e UF */
 function splitCidade(v){ const m = String(v||'').match(/^(.*?)\s*[\/\-]\s*([A-Za-z]{2})\s*$/); return m ? {cidade:m[1].trim(), uf:m[2].toUpperCase()} : null; }
 function derive(r, today){
@@ -615,7 +629,7 @@ function derive(r, today){
   const ent = r.data_entrega ? String(r.data_entrega).slice(0,10)
             : isEntregue(r.status_entrega) && r.status_entrega_atualizado_em ? localISO(new Date(r.status_entrega_atualizado_em)) : null;
   if(!prev) sit = r._prazo_dias === null ? 'Sem prazo cadastrado' : 'Aguardando coleta';
-  else if(ent) sit = ent <= prev ? 'Entregue no prazo' : 'Entregue com atraso';
+  else if(ent) sit = deliveredStatus(ent, prev);
   else sit = today > prev ? 'Atrasado' : today === prev ? 'Vence hoje' : 'No prazo';
   r._situacao = sit;
   const pd = r.data_emissao_nf || r.data_pedido;          // base do filtro de ano/mês
@@ -694,9 +708,9 @@ function cellHtml(c, r){
   }
   const txt = fmt(c, v);
   const manual = c.edit && r[c.edit] !== null && r[c.edit] !== undefined;
-  const cls = [c.t==='num'||c.t==='money'||c.t==='int'?'num':'', c.t==='id'?'id':'', c.t==='long'?'long':'', c.ro?'ro':'', txt===''?'empty':'', manual?'man':''].join(' ');
+  const cls = [c.t==='num'||c.t==='money'||c.t==='int'?'num':'', c.t==='id'?'id':'', c.t==='long'?'long':'', c.ro?'ro':'', txt===''?'empty':'', manual?'man':'', c.typed?'typed':''].join(' ');
   const shownTxt = c.t==='long' && !document.body.classList.contains('wrap-text') ? txt.replace(/\s*\n\s*/g,' · ') : txt;
-  const title = manual ? ' title="Alterado manualmente — apague o valor para voltar ao cálculo automático"' : c.t==='long'&&txt ? ` title="${esc(txt)}"` : '';
+  const title = c.typed ? ' title="Clique para digitar a data da entrega — o status é atualizado sozinho"' : manual ? ' title="Alterado manualmente — apague o valor para voltar ao cálculo automático"' : c.t==='long'&&txt ? ` title="${esc(txt)}"` : '';
   return `<td class="${cls}" data-k="${c.k}"${title}><div class="c">${esc(shownTxt)}</div></td>`;
 }
 function chipGroup(label, key, items){
@@ -878,21 +892,24 @@ $('#wrap').addEventListener('scroll', ()=>{
 /* regras de entrega: data preenchida → status dentro/fora; status "Entregue…" sem data → data de hoje */
 function applyDeliveryRules(row, patch){
   const p = {...patch};
-  if('data_entrega' in p && p.data_entrega){
+  const recalc = ('data_entrega' in p && p.data_entrega) ||
+    (('prazo_dias_manual' in p || 'previsao_entrega_manual' in p) && row.data_entrega && isEntregue(row.status_entrega));
+  if(recalc){                                   // Entregue Dia digitado → status calculado pela previsão
     const tmp = {...row, ...p}; derive(tmp, todayISO());
-    if(tmp._previsao) p.status_entrega = p.data_entrega <= tmp._previsao ? 'Entregue dentro do prazo' : 'Entregue fora do prazo';
-    else toast('Pedido sem previsão de entrega: escolha o status manualmente.');
+    p.status_entrega = deliveredStatus(String(tmp.data_entrega).slice(0,10), tmp._previsao);
+    if(!tmp._previsao) toast('Pedido sem previsão de entrega: ficou como “Entregue”.');
   }
-  if('status_entrega' in patch){
-    if(isEntregue(p.status_entrega) && !row.data_entrega && !('data_entrega' in p)){
-      p.data_entrega = todayISO();
-      const tmp = {...row, ...p}; derive(tmp, todayISO());
-      const certo = tmp._previsao ? (p.data_entrega <= tmp._previsao ? 'Entregue dentro do prazo' : 'Entregue fora do prazo') : null;
-      if(certo && certo !== p.status_entrega) toast(`Entregue Dia ficou como hoje. Pela previsão (${fmt({t:'date'},tmp._previsao)}) seria “${certo}” — se a entrega foi em outra data, ajuste o Entregue Dia.`, true);
-    }
-    if(!isEntregue(p.status_entrega) && row.data_entrega) p.data_entrega = null;
-  }
+  if('data_entrega' in p && !p.data_entrega && isEntregue(row.status_entrega)) p.status_entrega = 'Em trânsito';
+  if('status_entrega' in patch && !isEntregue(p.status_entrega) && row.data_entrega) p.data_entrega = null;
   return p;
+}
+/* pede a data de entrega (usado quando escolhem "Entregue…" sem data) */
+function askDeliveryDate(title, onOk){
+  const m = modal(title, `<div class="field"><label>Entregue dia</label><input type="date" id="dtEnt" value="${todayISO()}"></div>
+    <div class="field"><small>O status é calculado comparando com a Previsão de Entrega: antes = adiantado, no dia = no prazo, depois = atrasado.</small></div>`,
+    [{t:'Cancelar'},{t:'Salvar', cls:'primary', fn:close=>{ const v=m.ov.querySelector('#dtEnt').value; if(!v) return toast('Informe a data.', true); close(); onOk(v); }}]);
+  setTimeout(()=>m.ov.querySelector('#dtEnt').focus(),30);
+  m.ov.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); m.ov.querySelector('.ft .primary').click(); } });
 }
 async function saveCell(id, patch){
   const row = byId.get(id); if(!row) return;
@@ -918,9 +935,14 @@ function markCell(id, keys, cls){
 /* ---------------- eventos da tabela ---------------- */
 const tb = $('#tb');
 tb.addEventListener('dblclick', e=>{ const td=e.target.closest('td[data-k]'); if(td) openEditor(td); });
+tb.addEventListener('click', e=>{ const td=e.target.closest('td[data-k]'); if(td && COL[td.dataset.k]?.typed && !editorOpen) openEditor(td); });
 tb.addEventListener('change', e=>{
   const t = e.target;
-  if(t.dataset.st){ saveCell(Number(t.dataset.st), {status_entrega: t.value || null}); }
+  if(t.dataset.st){
+    const id = Number(t.dataset.st), row = byId.get(id);
+    if(isEntregue(t.value) && !row.data_entrega){ render(); askDeliveryDate(`Pedido ${id} · data da entrega`, d=>saveCell(id, {data_entrega:d})); }
+    else saveCell(id, {status_entrega: t.value || null});
+  }
   else if(t.dataset.sel){ const id=Number(t.dataset.sel); t.checked?selected.add(id):selected.delete(id); t.closest('tr').classList.toggle('sel',t.checked); renderBulk(); updSelAll(); }
 });
 tb.addEventListener('click', e=>{ const h=e.target.closest('[data-h]'); if(h) showHistory(Number(h.dataset.h)); });
@@ -964,28 +986,26 @@ $('#chips').addEventListener('click', e=>{ const c=e.target.closest('[data-chip]
 $('#btnWrap').onclick = ()=>{ document.body.classList.toggle('wrap-text'); ls.set(LS_WRAP, document.body.classList.contains('wrap-text')); $('#btnWrap').classList.toggle('primary'); render(); };
 $('#btnReload').onclick = ()=> loadAll();
 $('#btnLogout').onclick = async ()=>{ await supa.auth.signOut(); location.reload(); };
-$('#bulkSt').innerHTML = '<option value="__auto" selected>Entregue hoje (dentro/fora calculado pelo prazo)</option>' + STATUS_ENTREGA.map(s=>`<option>${esc(s.v)}</option>`).join('') + '<option value="">— sem status —</option>';
+$('#bulkSt').innerHTML = '<option value="__date" selected>Entregue — informar data da entrega…</option>' +
+  STATUS_ENTREGA.filter(s=>!isEntregue(s.v)).map(s=>`<option>${esc(s.v)}</option>`).join('') + '<option value="">— sem status —</option>';
 $('#bulkNone').onclick = ()=>{ selected.clear(); render(); };
-$('#bulkApply').onclick = async ()=>{
-  const ids=[...selected], v=$('#bulkSt').value||null, today=todayISO();
-  const groups = new Map(); let semPrev = 0;          // "status|data" → [pedidos]
-  ids.forEach(id=>{ const r=byId.get(id); if(!r) return; let st=v, dt;
-    if(v==='__auto'){ dt = r.data_entrega || today;
-      if(!r._previsao){ semPrev++; return; }
-      st = dt <= r._previsao ? 'Entregue dentro do prazo' : 'Entregue fora do prazo'; }
-    else dt = isEntregue(v) ? (r.data_entrega || today) : null;
-    const k = st+'|'+(dt||''); if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(id); });
-  loading(true, `Atualizando ${ids.length-semPrev} pedidos…`);
+async function bulkUpdate(ids, rowPatch){
+  const groups = new Map();                       // patch em JSON → [pedidos]
+  ids.forEach(id=>{ const r=byId.get(id); if(!r) return; const k=JSON.stringify(rowPatch(r)); if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(id); });
+  loading(true, `Atualizando ${ids.length} pedidos…`);
   for(const [k, list] of groups){
-    const [st, dt] = k.split('|');
     for(let i=0;i<list.length;i+=200){
-      const {error} = await supa.from('pedidos').update({status_entrega: st==='null'||st===''?null:st, data_entrega: dt||null}).in('pedido', list.slice(i,i+200));
+      const {error} = await supa.from('pedidos').update(JSON.parse(k)).in('pedido', list.slice(i,i+200));
       if(error){ loading(false); toast('Erro: '+error.message, true); return loadAll(); }
     }
   }
-  loading(false);
-  const n=ids.length-semPrev; toast(`${n} pedido${n===1?'':'s'} atualizado${n===1?'':'s'}` + (semPrev?` · ${semPrev} sem previsão de entrega ficou como estava`.replace('ficou como estava', semPrev===1?'ficou como estava':'ficaram como estavam'):''), !!semPrev);
-  selected.clear(); loadAll();
+  loading(false); toast(`${ids.length} pedido${ids.length===1?'':'s'} atualizado${ids.length===1?'':'s'}`); selected.clear(); loadAll();
+}
+$('#bulkApply').onclick = ()=>{
+  const ids=[...selected], v=$('#bulkSt').value;
+  if(v==='__date') return askDeliveryDate(`Data da entrega · ${ids.length} pedido${ids.length===1?'':'s'}`,
+    d => bulkUpdate(ids, r => ({data_entrega:d, status_entrega: deliveredStatus(d, r._previsao)})));
+  bulkUpdate(ids, () => ({status_entrega: v || null, data_entrega: null}));
 };
 $('#bulkDel').onclick = ()=>{
   const ids=[...selected];
