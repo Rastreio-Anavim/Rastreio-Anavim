@@ -395,6 +395,10 @@ table.simple{width:100%;border-collapse:collapse}
 const SUPABASE_URL      = 'https://wkkoksxfdqsamtngayva.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_IxQrYuw7Hhmkb8qbu6flVg_H0M8ivyG';
 
+/* Vendedor(es) que aparecem no sistema. Os demais são ignorados na importação e bloqueados no banco
+   (a mesma regra está na função vendedor_visivel do Supabase — se mudar aqui, mude lá também). */
+const VENDEDOR_VISIVEL = v => /^celso/.test(norm(v).trim());
+
 /* Opções do Status da Entrega — edite nomes/cores à vontade.
    Pedidos novos entram como "Em trânsito" (definido no banco). */
 const STATUS_ENTREGA = [
@@ -1021,6 +1025,7 @@ function askDeliveryDate(title, onOk){
 }
 async function saveCell(id, patch){
   const row = byId.get(id); if(!row) return;
+  if('vendedor' in patch && !VENDEDOR_VISIVEL(patch.vendedor)) return toast('Só pedidos do vendedor Celso podem ficar no sistema.', true), render();
   patch = applyDeliveryRules(row, patch);
   const backup = {...row};
   Object.assign(row, patch);
@@ -1193,12 +1198,15 @@ function prepareImport(name, wb){
   const map = [], unknown = [];
   aoa[hIdx].forEach((h,i)=>{ if(h===null||h==='') return; const c=byHeader.get(normHeader(h)); if(c) map.push([i,c]); else unknown.push(String(h).trim()); });
   const hasMsg = map.some(([,c])=>c.k==='mensagem');
+  if(!map.some(([,c])=>c.k==='vendedor')) return toast('A planilha precisa ter a coluna "Vendedor" — só os pedidos do Celso entram no sistema.', true);
+  let outros = 0;
   const recs = new Map(); let bad = 0;
   const stamp = new Date().toISOString();
   for(const r of aoa.slice(hIdx+1)){
     const rec = {};
     try{ for(const [i,c] of map) rec[c.k] = fromSheet(c, r[i]); } catch(err){ bad++; continue; }
     if(!rec.pedido){ if(r.some(v=>v!==null&&v!=='')) bad++; continue; }
+    if(!VENDEDOR_VISIVEL(rec.vendedor)){ outros++; continue; }
     if('cidade' in rec){ const sc = splitCidade(rec.cidade); if(sc){ rec.cidade = sc.cidade; if(!rec.estado) rec.estado = sc.uf; } if(!('estado' in rec)) rec.estado = null; }
     if(rec.estado) rec.estado = String(rec.estado).toUpperCase();
     if(hasMsg){ const s = splitMensagem(rec.mensagem); rec.mensagem=s.mensagem; rec.endereco_entrega=s.endereco; rec.mensagem_original=s.original; }
@@ -1206,7 +1214,7 @@ function prepareImport(name, wb){
     recs.set(rec.pedido, rec);
   }
   const list = [...recs.values()];
-  if(!list.length) return toast('Nenhum pedido encontrado na planilha.', true);
+  if(!list.length) return toast(outros ? 'Nenhum pedido do Celso nesta planilha.' : 'Nenhum pedido encontrado na planilha.', true);
   const novos = list.filter(r=>!byId.has(r.pedido)).length;
   const comEnd = list.filter(r=>r.endereco_entrega).length;
   const missing = COLS.filter(c=>c.x && c.k!=='estado' && !map.some(([,m])=>m.k===c.k)).map(c=>c.x);
@@ -1216,6 +1224,7 @@ function prepareImport(name, wb){
       <span>Novos (entram como “Em trânsito”)</span><b>${novos}</b>
       <span>Já existentes (serão atualizados)</span><b>${list.length-novos}</b>
       <span>Com endereço de entrega separado</span><b>${comEnd}</b>
+      ${outros?`<span>De outros vendedores (não entram)</span><b>${outros}</b>`:''}
       ${bad?`<span>Linhas ignoradas</span><b>${bad}</b>`:''}
     </div>
     <div class="warn">São mantidos: <b>Status Entrega</b>, <b>Observação Entrega</b> e prazos alterados à mão. As colunas da planilha substituem o que está no sistema.</div>
@@ -1431,7 +1440,7 @@ async function loadAll(){
     all.push(...data); if(data.length < size) break;
   }
   await loadPrazos();
-  rows = all; indexRows(); loading(false); render();
+  rows = all.filter(r=>VENDEDOR_VISIVEL(r.vendedor)); indexRows(); loading(false); render();
 }
 let rtT;
 function subscribeRealtime(){
@@ -1440,7 +1449,8 @@ function subscribeRealtime(){
     if(importing) return;
     if(p.eventType==='DELETE'){ const id=p.old?.pedido; rows = rows.filter(r=>r.pedido!==id); }
     else { const n=p.new; if(p.old?.pedido && p.old.pedido!==n.pedido) rows = rows.filter(r=>r.pedido!==p.old.pedido);
-      const cur = rows.find(r=>r.pedido===n.pedido); cur ? Object.assign(cur,n) : rows.push(n); }
+      const cur = rows.find(r=>r.pedido===n.pedido);
+      if(!VENDEDOR_VISIVEL(n.vendedor)) rows = rows.filter(r=>r.pedido!==n.pedido); else cur ? Object.assign(cur,n) : rows.push(n); }
     indexRows(); clearTimeout(rtT); rtT = setTimeout(render, 250);
   })
   .on('postgres_changes', {event:'*', schema:'public', table:'prazos_entrega'}, p=>{
